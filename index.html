@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f6f8">
+    <title>MY Notepad</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <main class="app">
+        <header class="titlebar">
+            <div class="brand">
+                <span class="brand-icon" aria-hidden="true">N</span>
+                <span> MY Notepad</span>
+                <span class="document-name" id="document-name">KEEP FOR LETTRE USE</span>
+                <span class="unsaved-indicator" id="unsaved-indicator" aria-label="Unsaved changes" hidden>●</span>
+            </div>
+            <div class="window-actions" aria-label="Editor actions">
+                <button class="icon-button" id="theme-toggle" type="button" aria-label="Switch to dark theme" title="Toggle theme">◐</button>
+            </div>
+        </header>
+
+        <nav class="menu-bar" aria-label="Main menu">
+            <div class="menu">
+                <button class="menu-trigger" type="button" aria-expanded="false">File</button>
+                <div class="menu-panel" role="menu">
+                    <button role="menuitem" type="button" data-action="new"><span>New</span><kbd>Ctrl+N</kbd></button>
+                    <button role="menuitem" type="button" data-action="open"><span>Open…</span><kbd>Ctrl+O</kbd></button>
+                    <div class="menu-divider"></div>
+                    <button role="menuitem" type="button" data-action="save"><span>Save</span><kbd>Ctrl+S</kbd></button>
+                    <div class="menu-divider"></div>
+                    <button role="menuitem" type="button" data-action="print"><span>Print</span><kbd>Ctrl+P</kbd></button>
+                </div>
+            </div>
+            <div class="menu">
+                <button class="menu-trigger" type="button" aria-expanded="false">Edit</button>
+                <div class="menu-panel" role="menu">
+                    <button role="menuitem" type="button" data-action="undo"><span>Undo</span><kbd>Ctrl+Z</kbd></button>
+                    <button role="menuitem" type="button" data-action="redo"><span>Redo</span><kbd>Ctrl+Y</kbd></button>
+                    <div class="menu-divider"></div>
+                    <button role="menuitem" type="button" data-action="cut"><span>Cut</span><kbd>Ctrl+X</kbd></button>
+                    <button role="menuitem" type="button" data-action="copy"><span>Copy</span><kbd>Ctrl+C</kbd></button>
+                    <button role="menuitem" type="button" data-action="paste"><span>Paste</span><kbd>Ctrl+V</kbd></button>
+                    <button role="menuitem" type="button" data-action="select-all"><span>Select all</span><kbd>Ctrl+A</kbd></button>
+                    <div class="menu-divider"></div>
+                    <button role="menuitem" type="button" data-action="find"><span>Find</span><kbd>Ctrl+F</kbd></button>
+                    <button role="menuitem" type="button" data-action="replace"><span>Replace</span><kbd>Ctrl+H</kbd></button>
+                    <button role="menuitem" type="button" data-action="go-to"><span>Go to line…</span><kbd>Ctrl+G</kbd></button>
+                    <div class="menu-divider"></div>
+                    <button class="format-menu-item" role="menuitem" type="button" data-action="format-topic"><span>Topic</span></button>
+                    <button class="format-menu-item" role="menuitem" type="button" data-action="format-key-point"><span>Key Point</span></button>
+                    <button class="format-menu-item" role="menuitem" type="button" data-action="format-normal"><span>Normal Text</span></button>
+                </div>
+            </div>
+            <div class="menu">
+                <button class="menu-trigger" type="button" aria-expanded="false">View</button>
+                <div class="menu-panel" role="menu">
+                    <button role="menuitemcheckbox" aria-checked="true" type="button" data-action="word-wrap"><span>Word wrap</span><span class="checkmark">✓</span></button>
+                    <button role="menuitemcheckbox" aria-checked="true" type="button" data-action="status-bar"><span>Status bar</span><span class="checkmark">✓</span></button>
+                    <div class="menu-divider"></div>
+                    <button role="menuitem" type="button" data-action="zoom-in"><span>Zoom in</span><kbd>Ctrl++</kbd></button>
+                    <button role="menuitem" type="button" data-action="zoom-out"><span>Zoom out</span><kbd>Ctrl+-</kbd></button>
+                    <button role="menuitem" type="button" data-action="zoom-reset"><span>Restore default zoom</span><kbd>Ctrl+0</kbd></button>
+                </div>
+            </div>
+            <div class="menu-spacer"></div>
+            <div class="toolbar-actions">
+                <label class="font-picker">
+                    <span>Font</span>
+                    <select id="font-family" aria-label="Editor font">
+                        <option value="consolas">Consolas</option>
+                        <option value="courier">Courier New</option>
+                        <option value="segoe">Segoe UI</option>
+                        <option value="arial">Arial</option>
+                        <option value="georgia">Georgia</option>
+                        
+                    
+                    </select>
+                </label>
+                <label class="color-picker" title="Change note text color">
+                    <span>Color</span>
+                    <input id="text-color" type="color" value="#303541" aria-label="Note text color">
+                </label>
+                <button class="toolbar-button format-button" type="button" data-action="format-topic" title="Make the current paragraph a large topic">
+                    <span>Topic</span>
+                </button>
+                <button class="toolbar-button format-button" type="button" data-action="format-key-point" title="Make the current paragraph a key point">
+                    <span>Key Point</span>
+                </button>
+                <button class="toolbar-button format-button" type="button" data-action="format-normal" title="Make the current paragraph normal text">
+                    <span>Normal</span>
+                </button>
+                <button class="toolbar-button" type="button" data-action="notes" title="View saved notes" aria-label="View saved notes">
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3h12v14H4z"></path><path d="M7 7h6M7 10h6M7 13h4"></path></svg>
+                    <span>Notes</span>
+                </button>
+                <button class="toolbar-button" type="button" data-action="history" title="View save history" aria-label="View save history">
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10a7 7 0 1 0 2-5"></path><path d="M3 4v4h4M10 6v4l3 2"></path></svg>
+                    <span>History</span>
+                </button>
+                <button class="toolbar-button" type="button" data-action="find" title="Find (Ctrl+F)">
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.7" cy="8.7" r="5.6"></circle><path d="m13 13 4 4"></path></svg>
+                    <span>Find</span>
+                </button>
+                <button class="toolbar-button" type="button" data-action="save" title="Save (Ctrl+S)" aria-label="Save">
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3h12l2 2v12H3z"></path><path d="M6 3v5h8V3M6 17v-6h8v6"></path></svg>
+                    <span>Save</span>
+                </button>
+            </div>
+        </nav>
+
+        <section class="editor-shell" aria-label="Text editor">
+            <label class="sr-only" for="editor">Document text</label>
+            <div id="editor" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="false" aria-label="Document text" aria-placeholder="Start typing…"></div>
+            <div class="empty-hint" id="empty-hint" aria-hidden="true">Just start typing</div>
+        </section>
+
+        <footer class="status-bar" id="status-bar">
+            <div class="status-left">
+                <span id="cursor-position">Ln 1, Col 1</span>
+                <span class="status-separator"></span>
+                <span id="selection-status">0 characters</span>
+            </div>
+            <div class="status-right">
+             
+              
+                
+                <button class="zoom-control" type="button" data-action="zoom-out" aria-label="Zoom out">−</button>
+                <span id="zoom-level">100%</span>
+                <button class="zoom-control" type="button" data-action="zoom-in" aria-label="Zoom in">+</button>
+                <span class="status-separator"></span>
+                <span id="note-timestamp">No note saved yet</span>
+            </div>
+        </footer>
+    </main>
+
+    <input id="file-picker" type="file" accept=".txt,.text,.md,.log,.csv,.json,.xml,.html,.css,.js,.py,.c,.cpp,.h,.java,.ini,.yaml,.yml,.toml" hidden>
+
+    <dialog id="find-dialog" class="find-dialog">
+        <form method="dialog" id="find-form">
+            <div class="dialog-heading">
+                <div>
+                    <h1 id="find-title">Find</h1>
+                    <p>Search this document</p>
+                </div>
+                <button class="icon-button close-dialog" type="button" aria-label="Close">×</button>
+            </div>
+            <label class="field-label" for="find-input">Find what</label>
+            <div class="find-row">
+                <input id="find-input" type="search" autocomplete="off">
+                <button class="secondary-button" id="find-next" type="button">Find next</button>
+            </div>
+            <div class="replace-fields" id="replace-fields" hidden>
+                <label class="field-label" for="replace-input">Replace with</label>
+                <div class="find-row">
+                    <input id="replace-input" type="text" autocomplete="off">
+                    <button class="secondary-button" id="replace-one" type="button">Replace</button>
+                </div>
+                <button class="text-button" id="replace-all" type="button">Replace all</button>
+            </div>
+            <div class="dialog-options">
+                <label><input id="match-case" type="checkbox"> Match case</label>
+                <span id="find-feedback" role="status" aria-live="polite"></span>
+            </div>
+            <div class="dialog-footer">
+                <button class="secondary-button" type="button" data-close-dialog>Close</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="line-dialog" class="line-dialog">
+        <form method="dialog" id="line-form">
+            <div class="dialog-heading">
+                <div>
+                    <h1>Go to line</h1>
+                    <p>Enter a line number between 1 and <span id="line-count">1</span>.</p>
+                </div>
+                <button class="icon-button close-dialog" type="button" aria-label="Close">×</button>
+            </div>
+            <label class="field-label" for="line-input">Line number</label>
+            <input id="line-input" type="number" min="1" value="1">
+            <div class="dialog-footer">
+                <button class="secondary-button" type="button" data-close-dialog>Cancel</button>
+                <button class="primary-button" id="go-to-confirm" value="default">Go to</button>
+            </div>
+        </form>
+    </dialog>
+
+    <dialog id="notes-dialog" class="notes-dialog">
+        <div class="notes-dialog-content">
+            <div class="dialog-heading">
+                <div>
+                    <h1>Saved notes</h1>
+                    <p>Your notes are saved in this browser on this device.</p>
+                </div>
+                <button class="icon-button close-dialog" type="button" aria-label="Close">×</button>
+            </div>
+            <div class="notes-list" id="notes-list" aria-live="polite"></div>
+            <div class="dialog-footer">
+                <button class="secondary-button" type="button" data-close-dialog>Close</button>
+                <button class="primary-button" id="new-note-button" type="button">New note</button>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog id="save-dialog" class="save-dialog">
+        <div class="save-dialog-content">
+            <div class="dialog-heading">
+                <div>
+                    <h1>Save note</h1>
+                    <p>Choose where to save this note.</p>
+                </div>
+                <button class="icon-button close-dialog" type="button" aria-label="Close">×</button>
+            </div>
+            <div class="save-options">
+                <button class="save-option" type="button" data-action="save-note">
+                    <strong>Save in Notepad</strong>
+                    <span>Keep this note in your saved notes on this device.</span>
+                </button>
+                <button class="save-option" type="button" data-action="save-device">
+                    <strong>Save to device</strong>
+                    <span>Download a text copy to your device.</span>
+                </button>
+            </div>
+            <div class="dialog-footer">
+                <button class="secondary-button" type="button" data-close-dialog>Cancel</button>
+            </div>
+        </div>
+    </dialog>
+
+    <dialog id="history-dialog" class="notes-dialog">
+        <div class="notes-dialog-content">
+            <div class="dialog-heading">
+                <div>
+                    <h1>Save history</h1>
+                    <p>Previously saved versions on this device.</p>
+                </div>
+                <button class="icon-button close-dialog" type="button" aria-label="Close">×</button>
+            </div>
+            <div class="notes-list" id="history-list" aria-live="polite"></div>
+            <div class="dialog-footer">
+                <button class="secondary-button" type="button" data-close-dialog>Close</button>
+            </div>
+        </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
