@@ -75,10 +75,12 @@
                         <option value="segoe">Segoe UI</option>
                         <option value="arial">Arial</option>
                         <option value="georgia">Georgia</option>
-                        
-                    
                     </select>
                 </label>
+                <button class="toolbar-button" type="button" data-action="insert-image" title="Insert an image">
+                    <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="3" width="15" height="14" rx="2"></rect><circle cx="7" cy="7.5" r="1.5"></circle><path d="m3 14 4-4 3 3 2-2 5 5"></path></svg>
+                    <span>Image</span>
+                </button>
                 <label class="color-picker" title="Change note text color">
                     <span>Color</span>
                     <input id="text-color" type="color" value="#303541" aria-label="Note text color">
@@ -91,6 +93,9 @@
                 </button>
                 <button class="toolbar-button format-button" type="button" data-action="format-normal" title="Make the current paragraph normal text">
                     <span>Normal</span>
+                </button>
+                <button class="toolbar-button format-button" type="button" data-action="underline" title="Underline selected text">
+                    <span><u>Underline</u></span>
                 </button>
                 <button class="toolbar-button" type="button" data-action="notes" title="View saved notes" aria-label="View saved notes">
                     <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 3h12v14H4z"></path><path d="M7 7h6M7 10h6M7 13h4"></path></svg>
@@ -112,9 +117,52 @@
         </nav>
 
         <section class="editor-shell" aria-label="Text editor">
-            <label class="sr-only" for="editor">Document text</label>
-            <div id="editor" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="false" aria-label="Document text" aria-placeholder="Start typing…"></div>
-            <div class="empty-hint" id="empty-hint" aria-hidden="true">Just start typing</div>
+            <label class="sr-only" for="editor">Document canvas</label>
+            <div class="image-tools" id="image-tools" aria-label="Selected image controls" hidden>
+                <strong>Image</strong>
+                <label class="image-size-control" for="image-width">Width
+                    <input id="image-width" type="number" min="20" max="2000" step="10" aria-label="Image width in pixels">
+                    <span>px</span>
+                </label>
+                <button class="image-tool-button" id="image-smaller" type="button" title="Reduce image width">−</button>
+                <button class="image-tool-button" id="image-larger" type="button" title="Increase image width">+</button>
+                <span class="image-zoom-control" aria-label="Image zoom controls">
+                    <span>Zoom</span>
+                    <button class="image-tool-button" id="image-zoom-out" type="button" title="Zoom image out">−</button>
+                    <output id="image-zoom-level" for="image-zoom-out image-zoom-in">100%</output>
+                    <button class="image-tool-button" id="image-zoom-in" type="button" title="Zoom image in">+</button>
+                    <button class="image-tool-button" id="image-zoom-reset" type="button" title="Reset image zoom">Reset</button>
+                </span>
+                <button class="image-tool-button" id="rotate-left" type="button" title="Rotate image 90 degrees left">↶ 90°</button>
+                <button class="image-tool-button" id="rotate-right" type="button" title="Rotate image 90 degrees right">↷ 90°</button>
+                <span class="image-rotate-hint" id="image-rotate-hint" aria-live="polite">Double-click image, then drag to rotate.</span>
+                <div class="image-crop-controls" aria-label="Crop image edges">
+                    <label for="crop-top">Crop top % <input id="crop-top" type="number" min="0" max="40" value="0"></label>
+                    <label for="crop-right">right % <input id="crop-right" type="number" min="0" max="40" value="0"></label>
+                    <label for="crop-bottom">bottom % <input id="crop-bottom" type="number" min="0" max="40" value="0"></label>
+                    <label for="crop-left">left % <input id="crop-left" type="number" min="0" max="40" value="0"></label>
+                    <button class="image-tool-button" id="apply-crop" type="button">Apply crop</button>
+                    <button class="image-tool-button delete-image-button" id="delete-image" type="button">Delete image</button>
+                </div>
+            </div>
+            <div class="grid-tools" aria-label="Individual grid line controls">
+                <button class="image-tool-button" id="toggle-grid-lines" type="button" aria-pressed="true">Hide lines</button>
+                <button class="image-tool-button" id="add-horizontal-line" type="button">Add horizontal line</button>
+                <button class="image-tool-button" id="add-vertical-line" type="button">Add vertical line</button>
+                <strong>Move one line</strong>
+                <select id="grid-line-picker" aria-label="Choose an individual grid line to move">
+                    <option value="">Choose a line…</option>
+                </select>
+                <span id="selected-grid-line" aria-live="polite">Select or drag a line on the canvas</span>
+                <div class="grid-line-actions">
+                    <button class="image-tool-button" type="button" data-grid-delta="-4" aria-label="Move selected line up or left">−</button>
+                    <span>Move selected line</span>
+                    <button class="image-tool-button" type="button" data-grid-delta="4" aria-label="Move selected line down or right">+</button>
+                </div>
+                <button class="image-tool-button delete-image-button" id="delete-grid-line" type="button" disabled>Delete selected line</button>
+            </div>
+            <div id="editor" contenteditable="false" role="region" aria-label="Document canvas" aria-description="Click anywhere to place text. Drag text boxes to move them."></div>
+            <div class="empty-hint" id="empty-hint" aria-hidden="true">Click anywhere to write. Click an image, then type to write over it.</div>
         </section>
 
         <footer class="status-bar" id="status-bar">
@@ -137,6 +185,7 @@
     </main>
 
     <input id="file-picker" type="file" accept=".txt,.text,.md,.log,.csv,.json,.xml,.html,.css,.js,.py,.c,.cpp,.h,.java,.ini,.yaml,.yml,.toml" hidden>
+    <input id="image-picker" type="file" accept="image/png,image/jpeg,image/gif,image/webp,image/bmp,image/avif" hidden>
 
     <dialog id="find-dialog" class="find-dialog">
         <form method="dialog" id="find-form">
@@ -220,8 +269,8 @@
                     <span>Keep this note in your saved notes on this device.</span>
                 </button>
                 <button class="save-option" type="button" data-action="save-device">
-                    <strong>Save to device</strong>
-                    <span>Download a text copy to your device.</span>
+                    <strong>Save as PDF</strong>
+                    <span>Download a PDF copy of your note, including its layout and images.</span>
                 </button>
             </div>
             <div class="dialog-footer">

@@ -303,16 +303,151 @@ button {
     position: relative;
     display: flex;
     flex: 1;
+    flex-direction: column;
     min-height: 0;
     background: var(--surface);
+}
+
+.image-tools {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 9px 16px;
+    gap: 7px;
+    color: var(--muted);
+    background: var(--surface-soft);
+    border-bottom: 1px solid var(--border);
+    font-size: 10px;
+}
+
+.image-tools[hidden] {
+    display: none;
+}
+
+.grid-tools {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 6px 16px;
+    gap: 8px 14px;
+    color: var(--muted);
+    background: var(--surface-soft);
+    border-bottom: 1px solid var(--border);
+    font-size: 10px;
+}
+
+.grid-tools-lines-hidden > :not(#toggle-grid-lines) {
+    display: none;
+}
+
+.grid-tools-lines-hidden {
+    padding: 6px 16px;
+}
+
+.grid-tools strong {
+    color: var(--text);
+    font-size: 11px;
+}
+
+.grid-line-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#grid-line-picker {
+    max-width: 210px;
+    min-height: 28px;
+    padding: 0 6px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 10px;
+}
+
+#selected-grid-line {
+    min-width: 190px;
+}
+
+.image-tools strong {
+    margin-right: 4px;
+    color: var(--text);
+    font-size: 11px;
+}
+
+.image-size-control,
+.image-crop-controls label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.image-size-control input {
+    width: 68px;
+}
+
+.image-tools input {
+    height: 27px;
+    padding: 0 5px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 10px;
+}
+
+.image-crop-controls {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.image-crop-controls input {
+    width: 45px;
+}
+
+.image-tool-button {
+    min-height: 28px;
+    padding: 0 8px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 10px;
+}
+
+.image-tool-button:hover,
+.image-tool-button:focus-visible {
+    border-color: var(--accent);
+    outline: 0;
+}
+
+.image-tool-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.delete-image-button {
+    color: #bd4754;
+}
+
+.delete-image-button:hover,
+.delete-image-button:focus-visible {
+    border-color: #bd4754;
 }
 
 #editor {
     position: relative;
     z-index: 1;
     width: 100%;
-    height: 100%;
-    padding: 28px 34px 40px;
+    flex: 1;
+    min-height: 0;
+    padding: 0;
     overflow: auto;
     color: #303541;
     background: transparent;
@@ -322,12 +457,122 @@ button {
     font-size: 14px;
     line-height: 1.8;
     tab-size: 4;
-    white-space: pre-wrap;
-    overflow-wrap: anywhere;
+    white-space: normal;
+    isolation: isolate;
+}
+
+#editor::after {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    width: 1600px;
+    height: 1200px;
+    pointer-events: none;
+    content: "";
+}
+
+#editor .grid-lines {
+    position: absolute;
+    z-index: 4;
+    top: 0;
+    left: 0;
+    width: 1600px;
+    height: 1200px;
+    pointer-events: none;
+}
+
+#editor.grid-lines-hidden .grid-line {
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#editor.grid-line-placement-horizontal,
+#editor.grid-line-placement-horizontal *,
+#editor.grid-line-placement-vertical,
+#editor.grid-line-placement-vertical * {
+    cursor: crosshair;
+}
+
+#editor.grid-lines-hidden .grid-line-selected::after,
+#editor.grid-lines-hidden .grid-line:hover::after {
+    display: none;
+}
+
+#editor .grid-line {
+    position: absolute;
+    display: block;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    touch-action: none;
+    pointer-events: auto;
+}
+
+#editor .grid-line::after {
+    position: absolute;
+    background: rgb(116 145 185 / 35%);
+    content: "";
+}
+
+#editor .grid-line-horizontal {
+    left: 0;
+    width: 1600px;
+    height: 14px;
+    transform: translateY(-7px);
+    cursor: ns-resize;
+}
+
+#editor .grid-line-horizontal::after {
+    top: 6px;
+    right: 0;
+    left: 0;
+    height: 1px;
+}
+
+#editor .grid-line-vertical {
+    top: 0;
+    width: 14px;
+    height: 1200px;
+    transform: translateX(-7px);
+    cursor: ew-resize;
+}
+
+#editor .grid-line-vertical::after {
+    top: 0;
+    bottom: 0;
+    left: 6px;
+    width: 1px;
+}
+
+#editor .grid-line:hover::after,
+#editor .grid-line-selected::after {
+    background: var(--accent);
 }
 
 #editor:focus-visible {
     outline: 0;
+}
+
+#editor .canvas-text {
+    position: absolute;
+    z-index: 2;
+    min-width: 120px;
+    min-height: 28px;
+    max-width: 80%;
+    padding: 2px;
+    color: inherit;
+    background: transparent;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    outline: none;
+    cursor: text;
+}
+
+#editor .canvas-text:focus {
+    outline: 1px dashed rgb(81 105 216 / 45%);
 }
 
 #editor h1,
@@ -343,6 +588,36 @@ button {
 
 #editor h2 {
     font-size: 1.35em;
+}
+
+#editor img {
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    max-width: none;
+    height: auto;
+    transform-origin: center;
+    cursor: move;
+}
+
+#editor img:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+#editor img[data-rotate-mode="true"] {
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+#editor img[data-rotate-mode="true"]:active {
+    cursor: grabbing;
+}
+
+.image-rotate-hint {
+    color: var(--muted);
 }
 
 .empty-hint {
@@ -756,7 +1031,8 @@ body.dark .line-dialog {
 }
 
 body.dark .find-row input,
-body.dark .line-dialog input[type="number"] {
+body.dark .line-dialog input[type="number"],
+body.dark .image-tools input {
     border-color: #454b59;
 }
 
@@ -769,6 +1045,10 @@ body.no-status .status-bar {
     .toolbar-button[data-action="format-key-point"],
     .toolbar-button[data-action="format-normal"] {
         display: none;
+    }
+
+    .image-tools {
+        padding: 8px 12px;
     }
 }
 
@@ -868,27 +1148,51 @@ body.no-status .status-bar {
 }
 
 @media print {
+    @page {
+        size: landscape;
+        margin: 10mm;
+    }
+
     body {
         padding: 0;
         background: #fff;
     }
 
     .app {
-        width: 100%;
-        height: 100%;
+        display: block;
+        width: 960px;
+        height: auto;
+        min-height: 0;
+        overflow: visible;
         border: 0;
         box-shadow: none;
     }
 
     .titlebar,
     .menu-bar,
+    .image-tools,
+    .grid-tools,
     .status-bar,
     .empty-hint {
         display: none !important;
     }
 
+    .editor-shell {
+        display: block;
+        overflow: visible;
+    }
+
     #editor {
+        width: 1600px;
+        height: 1200px;
+        min-height: 1200px;
+        overflow: visible;
         color: #000;
         padding: 0;
+        zoom: 53%;
+    }
+
+    #editor .canvas-text:focus {
+        outline: 0;
     }
 }
